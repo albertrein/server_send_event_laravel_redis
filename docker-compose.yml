@@ -1,0 +1,29 @@
+version: '3.1'
+services:
+
+  projeto_1_backend_container:
+    build: .
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - '8080:80'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    environment:
+      - XDEBUG_MODE=develop,debug
+    networks:
+      - projeto-1-network
+
+  redis:
+    image: redis:4.0
+    container_name: app_redis
+    ports:
+      - "6382:6379"
+    networks:
+      - projeto-1-network
+
+networks:
+    projeto-1-network:
+      driver: "bridge"
